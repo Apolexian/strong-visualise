@@ -1,3 +1,4 @@
+import io
 import os
 from flask import Flask, jsonify, request, send_file
 from flask_cors import cross_origin
@@ -9,14 +10,13 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import os
 import boto3
+from base64 import encodebytes
+from PIL import Image
 
 load_dotenv()
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config['S3_BUCKET'] = os.getenv("S3_NAME")
-app.config['S3_KEY'] = os.getenv("ACESS_KEY")
-app.config['S3_SECRET'] = os.getenv("SECRET_ACCESS_KEY")
 
 def get_info(file):
     df = pd.read_csv(file)
@@ -96,12 +96,16 @@ def get_gainz():
     exercises = get_exercises(file, '%Y-%m-%d %H:%M:%S', exercises_info)
     plot_all(exercises, "./plots")
 
-    s3 = boto3.client("s3", aws_access_key_id=app.config['S3_KEY'], aws_secret_access_key=app.config['S3_SECRET'])
-   
-    for root, _, files in os.walk("./plots"):
+    encoded_imges = []
+    for _, _, files in os.walk("./plots"):
         for file_name in files:
-            local_file_path = os.path.join(root, file_name)
-            s3_key = os.path.relpath(local_file_path, "./plots")
-            s3.upload_file(local_file_path, app.config['S3_BUCKET'], s3_key)
+            encoded_imges.append(get_response_image("./plots/" + file_name))
             os.remove("./plots/" + file_name)
-    return jsonify("Uploaded")
+    return jsonify(encoded_imges)
+
+def get_response_image(image_path):
+    pil_img = Image.open(image_path, mode='r')
+    byte_arr = io.BytesIO()
+    pil_img.save(byte_arr, format='PNG')
+    encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii')
+    return encoded_img
