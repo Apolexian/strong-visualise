@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const backendUrlSend = "http://apolnav.pythonanywhere.com/get_gainz";
