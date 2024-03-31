@@ -2,18 +2,11 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
-type StrongData = {
-  Date: string,
-  WorkoutName: string,
-  ExerciseName: string
-}
-
 const backendUrlSend = "http://127.0.0.1:5000/get_gainz";
 
 function App() {
 
-  const [fileState, setFileState] = useState<File[]>()
+  const [images, setImages] = useState<string[]>([]);
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) {
@@ -28,14 +21,10 @@ function App() {
       headers: { "Content-Type": "multipart/form-data" }
     }).then(
       async result => {
-        
+        setImages(result.data);
       }
     )
   };
-
-  useEffect(() => {
-    console.log(fileState, '- Has changed')
-  }, [fileState]) // <-- here put the parameter to listen, react will re-render component when your state will be changed
 
 
   return (
@@ -48,6 +37,13 @@ function App() {
         onChange={changeHandler}
         style={{ display: "block", margin: "10px auto" }}
       />
+      {images.map((base64String, index) => (
+        <img
+          key={index}
+          src={`data:image/png;base64,${base64String}`}
+          alt={`Image ${index + 1}`}
+        />
+      ))}
     </div>
   );
 }
