@@ -2,7 +2,7 @@ import './App.css';
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const backendUrlSend = "http://apolnav.pythonanywhere.com/get_gainz";
+const backendUrlSend = "https://apolnav.pythonanywhere.com/get_gainz";
 
 function App() {
 
