@@ -1,4 +1,3 @@
-import io
 import os
 from flask import Flask, jsonify, request, send_file
 from flask_cors import cross_origin
@@ -7,10 +6,17 @@ from datetime import datetime
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-import zipfile
+from dotenv import load_dotenv
+import os
+import boto3
+
+load_dotenv()
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['S3_BUCKET'] = os.getenv("S3_NAME")
+app.config['S3_KEY'] = os.getenv("ACESS_KEY")
+app.config['S3_SECRET'] = os.getenv("SECRET_ACCESS_KEY")
 
 def get_info(file):
     df = pd.read_csv(file)
@@ -39,7 +45,7 @@ def plot_volumes(data, filename):
     sns.move_legend(ax2, "upper right") # set reps legend to upper right
     
     fig.autofmt_xdate()
-    plt.savefig(filename+".svg")
+    plt.savefig(filename+".png")
     plt.close("all")
 
 def plot_sets(primary, secondary, mrv, mev, filename):
@@ -50,7 +56,7 @@ def plot_sets(primary, secondary, mrv, mev, filename):
     ax.axhline(y=mrv, label="MRV", color="green",ls=":")
     ax.axhline(y=mev, label="MEV", color="green",ls=":")
     fig.autofmt_xdate()
-    plt.savefig(filename+".svg")
+    plt.savefig(filename+".png")
     plt.close("all")
 
 def plot_all(data, directory):
@@ -90,15 +96,12 @@ def get_gainz():
     exercises = get_exercises(file, '%Y-%m-%d %H:%M:%S', exercises_info)
     plot_all(exercises, "./plots")
 
-    fileobj = io.BytesIO()
-    with zipfile.ZipFile(fileobj, 'w') as zip_file:
-        zip_info = zipfile.ZipInfo("plots.zip")
-        zip_info.compress_type = zipfile.ZIP_DEFLATED
-        for filename in os.listdir("./plots"):
-            filename = './plots/' + filename
-            with open(filename) as fd:
-                zip_file.writestr(zip_info, fd.read())
-            os.remove(filename)
-      
-    fileobj.seek(0)
-    return send_file(fileobj, as_attachment=True, mimetype="application/zip", download_name="plots.zip")
+    s3 = boto3.client("s3", aws_access_key_id=app.config['S3_KEY'], aws_secret_access_key=app.config['S3_SECRET'])
+   
+    for root, _, files in os.walk("./plots"):
+        for file_name in files:
+            local_file_path = os.path.join(root, file_name)
+            s3_key = os.path.relpath(local_file_path, "./plots")
+            s3.upload_file(local_file_path, app.config['S3_BUCKET'], s3_key)
+            os.remove("./plots/" + file_name)
+    return jsonify("Uploaded")

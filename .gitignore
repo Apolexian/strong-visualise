@@ -35,3 +35,4 @@ cdk.out
 __pycache__
 plots
 exercises.csv
+.env
