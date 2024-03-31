@@ -38,7 +38,8 @@ def get_exercises(file, date_format, info):
 def plot_volumes(data, filename):
     fig, ax = plt.subplots()
     ax = sns.lineplot(data=data, x="Date", y="Volume", label="Volume", marker="H", lw=2.5, ls="--")
-    ax.set(ylabel="Volume (kg)", title=filename[:-4])
+    title = filename.split("/")[-1]
+    ax.set(ylabel="Volume (kg)", title=title)
     sns.move_legend(ax, "upper left") # set volume legend to upper left
 
     ax2 = ax.twinx()
@@ -54,7 +55,8 @@ def plot_sets(primary, secondary, mrv, mev, filename):
     fig, ax = plt.subplots()
     sns.lineplot(ax=ax, data=primary, x="Date", y="Sets", label="Primary", marker="H")
     sns.lineplot(ax=ax, data=secondary, x="Date", y="Sets", label="Secondary", color="r", marker="p")
-    ax.set(title=filename[:-4])
+    title = filename.split("/")[-1]
+    ax.set(title=title)
     ax.axhline(y=mrv, label="MRV", color="green",ls=":")
     ax.axhline(y=mev, label="MEV", color="green",ls=":")
     fig.autofmt_xdate()
