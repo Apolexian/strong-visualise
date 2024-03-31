@@ -1,15 +1,13 @@
 import io
 import os
-from flask import Flask, jsonify, request, send_file
-from flask_cors import cross_origin
+from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 import pandas as pd
 from datetime import datetime
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
-import os
-import boto3
 from base64 import encodebytes
 from PIL import Image
 
@@ -17,6 +15,10 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+CORS(app)
+
+root = os.path.dirname(__file__)
 
 def get_info(file):
     df = pd.read_csv(file)
@@ -88,20 +90,21 @@ def plot_all(data, directory):
 
         plot_sets(primary_sets, secondary_sets, mrv, mev, directory + "/mg_"+mg)
 
-@app.route('/get_gainz', methods=['POST'])
-@cross_origin()
+@app.route('/get_gainz', methods=["POST"])
 def get_gainz():
     file = request.files.get('file')
-    exercises_info = get_info("exercises.csv")
+    exercises_info = get_info(os.path.join(root, "exercises.csv"))
     exercises = get_exercises(file, '%Y-%m-%d %H:%M:%S', exercises_info)
-    plot_all(exercises, "./plots")
+    plot_all(exercises, os.path.join(root, "./plots/"))
 
     encoded_imges = []
-    for _, _, files in os.walk("./plots"):
+    for _, _, files in os.walk(os.path.join(root, "./plots")):
         for file_name in files:
-            encoded_imges.append(get_response_image("./plots/" + file_name))
-            os.remove("./plots/" + file_name)
-    return jsonify(encoded_imges)
+            encoded_imges.append(get_response_image(os.path.join(root, "./plots/" + file_name)))
+            os.remove(os.path.join(root, "./plots/" + file_name))
+    response = jsonify(encoded_imges)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 def get_response_image(image_path):
     pil_img = Image.open(image_path, mode='r')
