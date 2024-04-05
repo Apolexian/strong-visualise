@@ -12,6 +12,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 request_logger = RequestLogger()
 load_logger = ServerLoadLogger()
@@ -21,15 +22,6 @@ with app.app_context():
     request_logger.log_request(request)
 
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
-
-CORS(app)
-
-@app.after_request
-def after_request(response):
-  response.headers.set('Access-Control-Allow-Origin', '*')
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-  response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-  return response
 
 root = os.path.dirname(__file__)
 
