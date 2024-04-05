@@ -1,7 +1,7 @@
 import io
 import os
 from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
 from base64 import encodebytes
 from PIL import Image
@@ -38,6 +38,7 @@ def default():
     return jsonify('OK'), 200
 
 @app.route('/get_gainz', methods=["POST"])
+@cross_origin()
 def get_gainz():
     
     if 'file' not in request.files:
