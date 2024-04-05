@@ -26,6 +26,10 @@ CORS(app)
 
 root = os.path.dirname(__file__)
 
+@app.route('/', methods=["POST"])
+def default():
+    return jsonify('OK'), 200
+
 @app.route('/get_gainz', methods=["POST"])
 def get_gainz():
     
