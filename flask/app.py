@@ -30,7 +30,6 @@ def default():
     return jsonify('OK'), 200
 
 @app.route('/get_gainz', methods=["POST"])
-@cross_origin()
 def get_gainz():
     
     if 'file' not in request.files:
@@ -58,6 +57,7 @@ def get_gainz():
             encoded_images.append(_get_response_image(os.path.join(root, "./plots/" + file_name)))
             os.remove(os.path.join(root, "./plots/" + file_name))
     response = jsonify(encoded_images)
+    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 def _get_response_image(image_path):
