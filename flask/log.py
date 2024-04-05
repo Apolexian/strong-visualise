@@ -23,7 +23,7 @@ class ServerLoadLogger(BaseLogger):
         log_message = f"CPU Usage: {cpu_percent}% | Memory Usage: {memory_percent}%"
         self.logger.info(log_message)
         
-    def start_logging(self, interval=60):
+    def start_logging(self, interval=600):
         while True:
             self.log_server_load()
             time.sleep(interval)
