@@ -16,13 +16,9 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 request_logger = RequestLogger()
 load_logger = ServerLoadLogger()
 
-@app.before_request
-def log_request_info():
-    request_logger.log_request(request)
-
-@app.before_first_request
-def start_load_logging():
+with app.app_context():
     load_logger.start_logging()
+    request_logger.log_request(request)
 
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
