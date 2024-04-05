@@ -24,6 +24,13 @@ MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
 CORS(app)
 
+@app.after_request
+def after_request(response):
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  return response
+
 root = os.path.dirname(__file__)
 
 @app.route('/', methods=["POST"])
@@ -58,9 +65,6 @@ def get_gainz():
             encoded_images.append(_get_response_image(os.path.join(root, "./plots/" + file_name)))
             os.remove(os.path.join(root, "./plots/" + file_name))
     response = jsonify(encoded_images)
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
     return response
 
 def _get_response_image(image_path):
