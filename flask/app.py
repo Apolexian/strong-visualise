@@ -25,7 +25,7 @@ MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
 root = os.path.dirname(__file__)
 
-@app.route('/', methods=["POST"])
+@app.route('/', methods=["GET", "POST", "OPTION"])
 def default():
     return jsonify('OK'), 200
 
