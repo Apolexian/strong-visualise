@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaGithub } from 'react-icons/fa';
 
-const backendUrlSend = "https://apolnav.pythonanywhere.com/get_gainz";
+const backendUrlSend = "https://strong-visualise-zaxc4.ondigitalocean.app/get_gainz";
 
 interface FileInputProps {
   label: string;
