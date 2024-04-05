@@ -5,4 +5,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install python-dotenv
 EXPOSE 5000
 ENV FLASK_APP=app.py
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
