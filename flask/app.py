@@ -35,7 +35,7 @@ root = os.path.dirname(__file__)
 def default():
     return jsonify('OK'), 200
 
-# Webhook updates pythonanywhere repo
+# Webhook updates Pythonanywhere repo
 @app.route('/update_server', methods=['POST'])
 def webhook():
     if request.method == 'POST':
