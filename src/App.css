@@ -192,3 +192,38 @@ html {
   height: 30px;
   margin-left: 5px;
 }
+
+.error-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 999;
+  max-width: 300px;
+}
+
+.error-popup-content {
+  display: flex;
+  align-items: center;
+}
+
+.error-popup-content p {
+  margin: 0;
+  padding-left: 10px;
+}
+
+.close {
+  color: #555;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.close:hover {
+  color: #f00;
+}

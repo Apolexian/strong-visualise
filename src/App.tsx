@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaGithub } from 'react-icons/fa';
 
-const backendUrlSend = "https://apolnav.pythonanywhere.com/get_gainz";
+const backendUrlSend = "http://localhost:5000/get_gainz";
 
 interface FileInputProps {
   label: string;
@@ -23,6 +23,24 @@ const FileInput: React.FC<FileInputProps> = ({ label, onFileChange }) => {
       <input type="file" onChange={handleFileChange} />
     </div>
   );
+};
+
+const ErrorPopup: React.FC<ErrorPopupProps> = ({ message }) => {
+  const closeError = () => {
+    window.location.reload();
+  };
+  return (
+    <div className="error-popup">
+      <div className="error-popup-content">
+        <span className="close" onClick={closeError}>&times;</span>
+        <p>{message}</p>
+      </div>
+    </div>
+  );
+};
+
+interface ErrorPopupProps {
+  message: string
 };
 
 const Footer = () => {
@@ -90,6 +108,8 @@ function App() {
   const [buttonPressed, setButtonPressed] = useState<boolean>(false);
   const [errorMessageFile1, setErrorMessageFile1] = useState('');
   const [errorMessageFile2, setErrorMessageFile2] = useState('');
+  const [errorPopUp, setErrorPopUp] = useState<boolean>(false);
+  const [errorPopUpMessage, setErrorPopUpMessage] = useState('');
 
   const handleFile1Change = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -143,7 +163,11 @@ function App() {
           setImages(result.data);
           setLoading(false);
         }
-      )
+      ).catch(function (error) {
+        setLoading(false);
+        setErrorPopUp(true);
+        setErrorPopUpMessage(`An error has occurred: ${error.response.data.error}`);
+      });
     } else {
       // Handle the case where one or both files are null
       console.error("Error: Both files must be selected.");
@@ -202,16 +226,22 @@ function App() {
           {(loading) ? (
             <Spinner />
           ) : (
-            <div className="image-gallery-container">
-              {images.map((base64String, index) => (
-                <img
-                  className="gallery-image"
-                  key={index}
-                  src={`data:image/png;base64,${base64String}`}
-                  alt={`Plot ${index + 1}`}
-                />
-              ))}
+            <div>
+              {(errorPopUp) ? (
+                <ErrorPopup message={errorPopUpMessage} />) : (
+                <div className="image-gallery-container">
+                  {images.map((base64String, index) => (
+                    <img
+                      className="gallery-image"
+                      key={index}
+                      src={`data:image/png;base64,${base64String}`}
+                      alt={`Plot ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
+
           )}
         </div>
       )};

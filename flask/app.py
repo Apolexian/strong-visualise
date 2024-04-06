@@ -54,7 +54,7 @@ def get_gainz():
         exercises = get_exercises(file, '%Y-%m-%d %H:%M:%S', exercises_info)
     except ValueError as e:
         app.logger.error(f"Request from {request.remote_addr} file in wrong format.")
-        return jsonify({'error': e}), 400
+        return jsonify({'error': e.args[0]}), 400
     
     plot_all(exercises, os.path.join(root, "./plots/"))
 
@@ -82,7 +82,7 @@ def verify_dataframe_format(df):
     try:
         for col in expected_columns:
             df[col]
-    except IndexError:
+    except KeyError:
         raise ValueError(f"Missing columns: {col}")
     return True
 
