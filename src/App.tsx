@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaGithub } from 'react-icons/fa';
 
-const backendUrlSend = "http://localhost:5000/get_gainz";
+const backendUrlSend = "https://apolnav.pythonanywhere.com/get_gainz";
 
 interface FileInputProps {
   label: string;
@@ -46,7 +46,7 @@ interface ErrorPopupProps {
 const Footer = () => {
   return (
     <footer className="footer">
-      <p className="footer-text">Consider contributing to the project</p>
+      <p className="footer-text">Consider contributing to the project.</p>
       <a
         href="https://github.com/Apolexian/strong-visualise"
         target="_blank"
@@ -64,17 +64,34 @@ const Explanation: React.FC = () => {
   return (
     <div className="explanation-container">
       <p style={{
-        textAlign: 'center',
+        textAlign: 'left',
         color: '#fff',
-        marginTop: '50px',
+        marginTop: '30px',
         fontFamily: 'Arial, sans-serif',
-        fontSize: '36px',
+        fontSize: '17px',
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        letterSpacing: '2px',
-        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+        letterSpacing: '1px',
+        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
       }}>
-        Input the data you exported from the Strong app. Better explanation coming soon.
+        <ol>
+          <li>
+            Follow the Strong App <a href="https://help.strongapp.io/article/235-export-workout-data">instructions on exporting your data</a>.
+          </li>
+          <li>
+            <p>Select this file for the first input.</p>
+          </li>
+          <li>
+            <p>Create an Exercise Bank csv in the following format:</p>
+            <img src="/Exercise_Bank.png" alt="The exercise bank consists of the Exercise Name, Primary Muscle Group, Secondary Muscle Group, MRV, MEV and MAV(P) columns."></img>
+            <p><a href="/exercises.csv" download>Download the example Exercise Bank to edit</a></p>
+          </li>
+          <li>
+            <p>Use the Exercise Bank CSV as the second input.</p>
+          </li>
+          <li><p>Hit Go.</p></li>
+        </ol>
+
       </p>
     </div>
   );
@@ -199,11 +216,11 @@ function App() {
             {!buttonPressed && (
               <div className="form-container"> {/* Apply CSS class for styling */}
                 <div className="file-inputs-container"> {/* Separate container for file inputs */}
-                  <FileInput label="Your data" onFileChange={handleFile1Change} />
+                  <FileInput label="Your Strong App data" onFileChange={handleFile1Change} />
                   {errorMessageFile1 && <p style={{ color: 'red' }}>{errorMessageFile1}</p>}
                   {file1 && (
                     <div>
-                      <FileInput label="Your second data" onFileChange={handleFile2Change} />
+                      <FileInput label="Your Exercise Bank" onFileChange={handleFile2Change} />
                       {errorMessageFile2 && <p style={{ color: 'red' }}>{errorMessageFile2}</p>}
                     </div>
                   )}
@@ -211,7 +228,7 @@ function App() {
                 <div className="button-container"> {/* Separate container for the button */}
                   {file2 && (
                     <button onClick={handleSubmit} disabled={submitDisabled}>
-                      Submit
+                      Go
                     </button>
                   )}
                 </div>

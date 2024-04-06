@@ -25,7 +25,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #6f7e82;
 }
 
 @keyframes App-logo-spin {
@@ -226,4 +226,11 @@ html {
 
 .close:hover {
   color: #f00;
+}
+
+a {
+  color: #FFF;
+}
+a:hover {
+   color: #00F
 }
