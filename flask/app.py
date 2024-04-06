@@ -43,7 +43,7 @@ def webhook():
         origin.pull()
         return 'Updated PythonAnywhere successfully', 200
     else:
-        return 'Wrong event type', 400
+        return 'Wrong Event type', 400
 
 @app.route('/get_gainz', methods=["POST"])
 def get_gainz():
