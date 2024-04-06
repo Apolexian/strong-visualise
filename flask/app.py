@@ -41,9 +41,9 @@ def webhook():
         repo = git.Repo('./.git')
         origin = repo.remotes.originorigin.pull()
         origin.pull()
-        return 'Updated PythonAnywhere successfully', 200
+        return 'Updated PythonAnywhere Successfully', 200
     else:
-        return 'Wrong Event type', 400
+        return 'Wrong Event Type', 400
 
 @app.route('/get_gainz', methods=["POST"])
 def get_gainz():
