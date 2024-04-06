@@ -12,6 +12,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
+import git
 
 load_dotenv()
 
@@ -33,6 +34,16 @@ root = os.path.dirname(__file__)
 @app.route('/', methods=["GET", "POST", "OPTION"])
 def default():
     return jsonify('OK'), 200
+
+@app.route('/update_server', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('./')
+        origin = repo.remotes.originorigin.pull()
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
 
 @app.route('/get_gainz', methods=["POST"])
 def get_gainz():
