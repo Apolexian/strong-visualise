@@ -38,7 +38,7 @@ def default():
 @app.route('/update_server', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('./.git')
+        repo = git.Repo('/home/apolnav/strong-visualise/.git')
         origin = repo.remotes.originorigin.pull()
         origin.pull()
         return 'Updated PythonAnywhere Successfully', 200
