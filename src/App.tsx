@@ -84,7 +84,7 @@ const Explanation: React.FC = () => {
           <li>
             <p>Create an Exercise Bank csv in the following format:</p>
             <img src="/Exercise_Bank.png" alt="The exercise bank consists of the Exercise Name, Primary Muscle Group, Secondary Muscle Group, MRV, MEV and MAV(P) columns."></img>
-            <p><a href="/exercises.csv" download>Download the example Exercise Bank to edit</a></p>
+            <p><a href="/Example_Exercise_bank.csv" download>Download the example Exercise Bank to edit</a></p>
           </li>
           <li>
             <p>Use the Exercise Bank CSV as the second input.</p>
