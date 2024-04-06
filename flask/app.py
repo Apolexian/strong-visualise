@@ -40,7 +40,8 @@ def default():
 def webhook():
     if request.method == 'POST':
         repo = git.Repo('/home/apolnav/strong-visualise/.git')
-        repo.remote().pull()
+        o = repo.remotes.origin
+        o.pull()
         return 'Updated PythonAnywhere Successfully', 200
     else:
         return 'Wrong Event Type', 400
